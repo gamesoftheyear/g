@@ -11,24 +11,26 @@
       ready: function () {
       },
       update: function () {
-        if (_size[0] !== _oldSize[0]) {
-          this.style.width = _size[0] + 'px';
-          _oldSize[0] = _size[0];
+        if (this._size[0] !== this._oldSize[0]) {
+          this.style.width = this._size[0] + 'px';
+          this._oldSize[0] = this._size[0];
         }
 
-        if (_size[1] !== _oldSize[1]) {
-          this.style.height = _size[1] + 'px';
-          _oldSize[1] = _size[1];
+        if (this._size[1] !== this._oldSize[1]) {
+          this.style.height = this._size[1] + 'px';
+          this._oldSize[1] = this._size[1];
         }
 
         var t = '' +
-          ' translate(' + this._position.join('px,') + 'px)' +
+          ' translate3d(' + this._position.join('px,') + 'px)' +
           ' rotateX(' + this._rotation[0] + 'deg)' +
           ' rotateY(' + this._rotation[1] + 'deg)' +
           ' rotateZ(' + this._rotation[2] + 'deg)';
         this.style.transform = t;
         this.style.webkitTransform = t;
         this.style.mozTransform = t;
+
+        console.log(t);
       },
       widthChanged: function (oldValue, newValue) {
         _size[0] = newValue;
