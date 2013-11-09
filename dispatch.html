@@ -8,8 +8,10 @@
       window.addEventListener("keypress", this.dispatchEvent);
     },
     dispatchEvent: function(evt) {
-      var notification = new CustomEvent('dispatch', { 'detail': 'space' });
-      window.dispatchEvent(notification);
+      if (evt.charCode == 32) {
+        var notification = new CustomEvent('dispatch', { 'detail': 'space' });
+        window.dispatchEvent(notification);
+      }
     },
   });
   </script>
