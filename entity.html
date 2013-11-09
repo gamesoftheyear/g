@@ -1,11 +1,26 @@
-<polymer-element name="g-entity" attributes="position rotation" extends="">
+<polymer-element name="g-entity" attributes="position rotation width height" extends="">
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
   </template>
   <script>
     Polymer('g-entity', {
       ready: function () {
       },
       update: function () {
+        if (_size[0] !== _oldSize[0]) {
+          this.style.width = _size[0] + 'px';
+          _oldSize[0] = _size[0];
+        }
+
+        if (_size[1] !== _oldSize[1]) {
+          this.style.height = _size[1] + 'px';
+          _oldSize[1] = _size[1];
+        }
+
         var t = '' +
           ' translate(' + this._position.join('px,') + 'px)' +
           ' rotateX(' + this._rotation[0] + 'deg)' +
@@ -15,14 +30,22 @@
         this.style.webkitTransform = t;
         this.style.mozTransform = t;
       },
-      positionChanged: function () {
-        this._position = this.getAttribute('position').split(',');
+      widthChanged: function (oldValue, newValue) {
+        _size[0] = newValue;
       },
-      rotationChanged: function () {
-        this._rotation = this.getAttribute('rotation').split(',');
+      heightChanged: function (oldValue, newValue) {
+        _size[1] = newValue;
+      },
+      positionChanged: function (oldValue, newValue) {
+        this._position = newValue.split(',');
+      },
+      rotationChanged: function (oldValue, newValue) {
+        this._rotation = newValue.split(',');
       },
       _position: [0, 0, 0],
-      _rotation: [0, 0, 0]
+      _rotation: [0, 0, 0],
+      _size: [0, 0, 0],
+      _oldSize: [0, 0, 0]
     });
   </script>
 </polymer-element>
