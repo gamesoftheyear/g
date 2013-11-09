@@ -10,10 +10,25 @@
         this.onUpdate = this.onUpdate.bind(this);
         this.onAddWorld = this.onAddWorld.bind(this);
         this.worlds = {};
+        this.dispatchBatch = [];
 
         this.addEventListener('AddWorld', this.onAddWorld, false);
+        window.addEventListener("keypress", this.registerEvent.bind(this));
 
         requestAnimationFrame(this.onUpdate);
+      },
+      registerEvent: function(event) {
+        //TODO: recognize when button is held down
+        if (event.charCode == 32) {
+          var notification = new CustomEvent('dispatch', { 'detail': 'space' });
+          this.dispatchBatch.push(notification);
+        }
+      },
+      dispatchEvents: function() {
+        while (this.dispatchBatch.length != 0) {
+          var event = this.dispatchBatch.pop();
+          window.dispatchEvent(event);
+        }
       },
       onAddWorld: function(event) {
         event.preventDefault();
@@ -31,6 +46,7 @@
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
         requestAnimationFrame(this.onUpdate);
+        this.dispatchEvents();
       }
     });
   </script>
