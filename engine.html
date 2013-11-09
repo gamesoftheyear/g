@@ -4,20 +4,66 @@
   </template>
   <script>
     Polymer('g-engine', {
+      guid: function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        }).toUpperCase();
+      },
       ready: function () {
         this.frame = 0;
         this.time = performance.now();
-        this.rAFCallback = this.update.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onAddWorld = this.onAddWorld.bind(this);
+        this.onRemoveWorld = this.onRemoveWorld.bind(this);
         this.worlds = {};
-        requestAnimationFrame(this.rAFCallback);
+        this.dispatchBatch = [];
+
+        this.addEventListener('AddWorld', this.onAddWorld, false);
+        window.addEventListener("keypress", this.registerEvent.bind(this));
+
+        requestAnimationFrame(this.onUpdate);
       },
-      update: function () {
+      registerEvent: function(event) {
+        //TODO: recognize when button is held down
+        if (event.charCode == 32) {
+          var notification = new CustomEvent('dispatch', { 'detail': 'space' });
+          this.dispatchBatch.push(notification);
+        }
+      },
+      dispatchEvents: function() {
+        while (this.dispatchBatch.length != 0) {
+          var event = this.dispatchBatch.pop();
+          window.dispatchEvent(event);
+        }
+      },
+      onAddWorld: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var world = event.detail;
+        if(!world.id) {
+          world.id = this.guid();
+        }
+        world.engine = this;
+        this.worlds[world.id] = world;
+        console.log('add world', world.id);
+      },
+      onRemoveWorld: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+      },
+      onUpdate: function () {
         ++ this.frame;
         var now = performance.now();
         var dt = now - this.time;
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
-        requestAnimationFrame(this.rAFCallback);
+        var worldIds = Object.keys(this.worlds);
+        worldIds.forEach(function(worldId) {
+          this.worlds[worldId].onUpdate(dt);
+        }.bind(this));
+        requestAnimationFrame(this.onUpdate);
+        this.dispatchEvents();
       }
     });
   </script>

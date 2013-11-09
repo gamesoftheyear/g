@@ -3,13 +3,22 @@
   <head>
     <script src="polymer.min.js"></script>
     <link rel="import" href="engine.html">
+    <link rel="import" href="world.html">
     <link rel="import" href="entity.html">
     <link rel="import" href="sprite.html">
     <link rel="import" href="mario.html">
+    <link rel="import" href="input.html">
+    <link rel="import" href="key.html">
   </head>
   <body>
     <g-engine>
-      <g-mario></g-mario>
+      <g-dispatch />
+      <g-input id="inputRegistry" />
+      <g-world>
+        <g-mario>
+          <g-key name="space"></g-key>
+        </g-mario>
+      </g-world>
     </g-engine>
   </body>
 </html>

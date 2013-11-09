@@ -1,0 +1,30 @@
+<polymer-element name="g-input">
+  <template>
+    <content></content>
+  </template>
+  <script>
+  Polymer('g-input', {
+    listeners: {},
+    actions: {'space': function() {alert('I\'m totally jumping right now');}},
+    ready: function() {
+      window.addEventListener("dispatch", this.handleDispatchEvent.bind(this));
+    },
+    handleDispatchEvent: function(evt) {
+      if (this.listeners.hasOwnProperty(evt.detail)) {
+        for (listener in this.listeners[evt.detail]) {
+          var obj = this.listeners[evt.detail][listener];
+          this.actions[evt.detail](obj);
+        }
+      }
+    },
+    register: function(obj, name){
+      if (this.listeners[name] == null) {
+        this.listeners[name] = [obj];
+      }
+      else {
+        this.listeners[name].push(obj);
+      }
+    },
+  });
+  </script>
+</polymer-element>
