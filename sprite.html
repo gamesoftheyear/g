@@ -1,0 +1,63 @@
+<polymer-element name="g-sprite" attributes="columns rows src xindex yindex">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 2000px;
+      }
+
+      :host #container {
+      }
+    </style>
+    <div id="container"></div>
+  </template>
+  <script>
+    Polymer('g-sprite', {
+      ready: function () {
+      },
+      update: function () {
+
+      },
+      xindexChanged: function () {
+
+      },
+      yindexChanged: function () {
+
+      },
+      srcChanged: function (oldValue, newValue) {
+        var that = this;
+
+        var imageContainer = this.$.container;
+
+        imageContainer.style.backgroundImage = 'url(' + newValue + ')';
+
+        var tmpImg = new Image();
+        tmpImg.onload = function () {
+          imageContainer.style.backgroundSize = tmpImg.width + 'px ' + tmpImg.height + 'px';
+
+          var columns = that.getAttribute('columns');
+          var rows = that.getAttribute('rows');
+
+          imageContainer.style.width = tmpImg.width / columns + 'px';
+          imageContainer.style.height = tmpImg.height / rows + 'px';
+
+          var xindex = 1;
+          var yindex = 0;
+
+          var bx = tmpImg.width / columns * xindex;
+          var by = tmpImg.height / rows * yindex;
+
+          imageContainer.style.backgroundPosition =  - bx + 'px ' + by + 'px';
+
+          // var t = 'scale(' + (tmpImg.width / that.clientWidth) + ', ' + (tmpImg.height / that.clientHeight) + ')';
+          // imageContainer.style.transform = t;
+          // imageContainer.style.webkitTransform = t;
+          // imageContainer.style.mozTransform = t;
+          // console.log(t);
+        };
+
+        tmpImg.src = newValue;
+      }
+    });
+  </script>
+</polymer-element>
