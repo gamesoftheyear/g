@@ -15,6 +15,7 @@
         this.time = performance.now();
         this.onUpdate = this.onUpdate.bind(this);
         this.onAddWorld = this.onAddWorld.bind(this);
+        this.onRemoveWorld = this.onRemoveWorld.bind(this);
         this.worlds = {};
 
         this.addEventListener('AddWorld', this.onAddWorld, false);

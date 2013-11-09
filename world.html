@@ -3,8 +3,19 @@
   </template>
   <script>
     Polymer('g-world', {
+      guid: function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        }).toUpperCase();
+      },
       ready: function () {
         this.entities = {};
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onAddEntity = this.onAddEntity.bind(this);
+        this.onRemoveEntity = this.onRemoveEntity.bind(this);
+
+        this.addEventListener('AddEntity', this.onAddEntity, false);
 
         var parent = this.parentNode;
         var addWorldEvent = new CustomEvent('AddWorld', {
@@ -27,7 +38,7 @@
         event.stopPropagation();
         var entity = event.detail;
         if(!entity.id) {
-          entity.id = this.engine.guid();
+          entity.id = this.guid();
         }
         this.entities[entity.id] = entity;
         console.log('add entity', entity.id);
