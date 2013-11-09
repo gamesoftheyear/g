@@ -4,6 +4,8 @@
   <script>
     Polymer('g-world', {
       ready: function () {
+        this.entities = {};
+
         var parent = this.parentNode;
         var addWorldEvent = new CustomEvent('AddWorld', {
           bubbles: true,
@@ -15,7 +17,20 @@
         });
       },
       onUpdate: function (dt) {
-
+        var entityIds = Object.keys(this.entities);
+        entityIds.forEach(function(entityId) {
+          this.entities[entityId].onUpdate(dt);
+        }.bind(this));
+      },
+      onAddEntity: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var entity = event.detail;
+        if(!entity.id) {
+          entity.id = this.engine.guid();
+        }
+        this.entities[entity.id] = entity;
+        console.log('add entity', entity.id);
       }
     });
   </script>

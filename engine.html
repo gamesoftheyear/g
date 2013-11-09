@@ -28,8 +28,9 @@
         if(!world.id) {
           world.id = this.guid();
         }
-        console.info(world.id);
+        world.engine = this;
         this.worlds[world.id] = world;
+        console.log('add world', world.id);
       },
       onRemoveWorld: function(event) {
 

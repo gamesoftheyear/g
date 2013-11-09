@@ -9,8 +9,23 @@
   <script>
     Polymer('g-entity', {
       ready: function () {
+        this._position = [0, 0, 0];
+        this._rotation = [0, 0, 0];
+        this._size = [0, 0, 0];
+        this._oldSize = [0, 0, 0];
+
+        var parent = this.parentNode;
+        var addEntityEvent = new CustomEvent('AddEntity', {
+          bubbles: true,
+          cancelable: true,
+          detail: this
+        });
+        this.async(function() {
+          parent.dispatchEvent(addEntityEvent);
+        });
       },
-      update: function () {
+      onUpdate: function (dt) {
+        console.log('onUpdate', this.id, dt);
         if (this._size[0] !== this._oldSize[0]) {
           this.style.width = this._size[0] + 'px';
           this._oldSize[0] = this._size[0];
@@ -41,11 +56,7 @@
       },
       rotationChanged: function (oldValue, newValue) {
         this._rotation = newValue.split(',');
-      },
-      _position: [0, 0, 0],
-      _rotation: [0, 0, 0],
-      _size: [0, 0, 0],
-      _oldSize: [0, 0, 0]
+      }
     });
   </script>
 </polymer-element>
