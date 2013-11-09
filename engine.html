@@ -6,17 +6,30 @@
       ready: function () {
         this.frame = 0;
         this.time = performance.now();
-        this.rAFCallback = this.update.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onAddWorld = this.onAddWorld.bind(this);
         this.worlds = {};
-        requestAnimationFrame(this.rAFCallback);
+
+        this.addEventListener('AddWorld', this.onAddWorld, false);
+
+        requestAnimationFrame(this.onUpdate);
       },
-      update: function () {
+      onAddWorld: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var world = event.detail;
+        this.worlds[world.id] = world;
+      },
+      onRemoveWorld: function(event) {
+
+      },
+      onUpdate: function () {
         ++ this.frame;
         var now = performance.now();
         var dt = now - this.time;
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
-        requestAnimationFrame(this.rAFCallback);
+        requestAnimationFrame(this.onUpdate);
       }
     });
   </script>

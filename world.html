@@ -4,9 +4,18 @@
   <script>
     Polymer('g-world', {
       ready: function () {
-
+        var parent = this.parentNode;
+        var addWorldEvent = new CustomEvent('AddWorld', {
+          bubbles: true,
+          cancelable: true,
+          detail: this
+        });
+        this.async(function() {
+          parent.dispatchEvent(addWorldEvent);
+        });
       },
       update: function () {
+
       }
     });
   </script>
