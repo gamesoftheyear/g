@@ -1,0 +1,12 @@
+<polymer-element name="g-key">
+  <template>
+    <content></content>
+  </template>
+  <script>
+  Polymer('g-key', {
+    ready: function() {
+      document.getElementById('inputRegistry').register(this.parentNode, this.getAttribute('name'));      
+    },
+  });
+  </script>
+</polymer-element>

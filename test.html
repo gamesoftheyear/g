@@ -5,10 +5,17 @@
     <link rel="import" href="engine.html">
     <link rel="import" href="entity.html">
     <link rel="import" href="mario.html">
+    <link rel="import" href="dispatch.html">
+    <link rel="import" href="input.html">
+    <link rel="import" href="key.html">
   </head>
   <body>
     <g-engine>
-      <g-mario></g-mario>
+      <g-dispatch />
+      <g-input id="inputRegistry" />
+      <g-mario>
+        <g-key name="space"></g-key>
+      </g-mario>
     </g-engine>
   </body>
 </html>
