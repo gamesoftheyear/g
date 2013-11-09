@@ -5,12 +5,18 @@
     Polymer('g-engine', {
       ready: function () {
         this.frame = 0;
-        requestAnimationFrame(this.update.bind(this));
+        this.time = performance.now();
+        this.rAFCallback = this.update.bind(this);
+        this.worlds = {};
+        requestAnimationFrame(this.rAFCallback);
       },
       update: function () {
         ++ this.frame;
-        console.info('frame:', this.frame);
-        requestAnimationFrame(this.update.bind(this));
+        var now = performance.now();
+        var dt = now - this.time;
+        this.time = now;
+        // console.info('frame, dt:', this.frame, dt);
+        requestAnimationFrame(this.rAFCallback);
       }
     });
   </script>
