@@ -31,6 +31,10 @@
         }
         this.entities[entity.id] = entity;
         console.log('add entity', entity.id);
+      },
+      onRemoveEntity: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
       }
     });
   </script>

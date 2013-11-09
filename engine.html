@@ -33,7 +33,8 @@
         console.log('add world', world.id);
       },
       onRemoveWorld: function(event) {
-
+        event.preventDefault();
+        event.stopPropagation();
       },
       onUpdate: function () {
         ++ this.frame;
