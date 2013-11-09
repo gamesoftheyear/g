@@ -1,0 +1,17 @@
+<polymer-element name="g-engine" attributes="" extends="">
+  <template>
+  </template>
+  <script>
+    Polymer('g-engine', {
+      ready: function () {
+        this.frame = 0;
+        requestAnimationFrame(this.update.bind(this));
+      },
+      update: function () {
+        ++ this.frame;
+        console.info('frame:', this.frame);
+        requestAnimationFrame(this.update.bind(this));
+      }
+    });
+  </script>
+</polymer-element>
