@@ -17,10 +17,25 @@
         this.onAddWorld = this.onAddWorld.bind(this);
         this.onRemoveWorld = this.onRemoveWorld.bind(this);
         this.worlds = {};
+        this.dispatchBatch = [];
 
         this.addEventListener('AddWorld', this.onAddWorld, false);
+        window.addEventListener("keypress", this.registerEvent.bind(this));
 
         requestAnimationFrame(this.onUpdate);
+      },
+      registerEvent: function(event) {
+        //TODO: recognize when button is held down
+        if (event.charCode == 32) {
+          var notification = new CustomEvent('dispatch', { 'detail': 'space' });
+          this.dispatchBatch.push(notification);
+        }
+      },
+      dispatchEvents: function() {
+        while (this.dispatchBatch.length != 0) {
+          var event = this.dispatchBatch.pop();
+          window.dispatchEvent(event);
+        }
       },
       onAddWorld: function(event) {
         event.preventDefault();
@@ -48,6 +63,7 @@
           this.worlds[worldId].onUpdate(dt);
         }.bind(this));
         requestAnimationFrame(this.onUpdate);
+        this.dispatchEvents();
       }
     });
   </script>
