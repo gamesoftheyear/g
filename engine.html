@@ -4,11 +4,18 @@
   </template>
   <script>
     Polymer('g-engine', {
+      guid: function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        }).toUpperCase();
+      },
       ready: function () {
         this.frame = 0;
         this.time = performance.now();
         this.onUpdate = this.onUpdate.bind(this);
         this.onAddWorld = this.onAddWorld.bind(this);
+        this.onRemoveWorld = this.onRemoveWorld.bind(this);
         this.worlds = {};
         this.dispatchBatch = [];
 
@@ -34,10 +41,16 @@
         event.preventDefault();
         event.stopPropagation();
         var world = event.detail;
+        if(!world.id) {
+          world.id = this.guid();
+        }
+        world.engine = this;
         this.worlds[world.id] = world;
+        console.log('add world', world.id);
       },
       onRemoveWorld: function(event) {
-
+        event.preventDefault();
+        event.stopPropagation();
       },
       onUpdate: function () {
         ++ this.frame;
@@ -45,6 +58,10 @@
         var dt = now - this.time;
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
+        var worldIds = Object.keys(this.worlds);
+        worldIds.forEach(function(worldId) {
+          this.worlds[worldId].onUpdate(dt);
+        }.bind(this));
         requestAnimationFrame(this.onUpdate);
         this.dispatchEvents();
       }
