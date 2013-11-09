@@ -1,4 +1,4 @@
-<polymer-element name="g-entity" attributes="" extends="">
+<polymer-element name="g-entity" attributes="position rotation" extends="">
   <template>
   </template>
   <script>
@@ -6,7 +6,23 @@
       ready: function () {
       },
       update: function () {
-      }
+        var t = '' +
+          ' translate(' + this._position.join('px,') + 'px)' +
+          ' rotateX(' + this._rotation[0] + 'deg)' +
+          ' rotateY(' + this._rotation[1] + 'deg)' +
+          ' rotateZ(' + this._rotation[2] + 'deg)';
+        this.style.transform = t;
+        this.style.webkitTransform = t;
+        this.style.mozTransform = t;
+      },
+      positionChanged: function () {
+        this._position = this.getAttribute('position').split(',');
+      },
+      rotationChanged: function () {
+        this._rotation = this.getAttribute('rotation').split(',');
+      },
+      _position: [0, 0, 0],
+      _rotation: [0, 0, 0]
     });
   </script>
 </polymer-element>
