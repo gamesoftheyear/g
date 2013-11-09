@@ -1,28 +1,53 @@
-<polymer-element name="g-sprite" attributes="columns rows src xindex yindex">
+<polymer-element name="g-sprite" attributes="columns rows src xindex yindex animation">
   <template>
     <style>
       :host {
         display: block;
-        height: 2000px;
+        width: 100%;
+        height: 100%;
       }
 
       :host #container {
+        -webkit-transform-origin: 0 0;
+           -moz-transform-origin: 0 0;
+                transform-origin: 0 0;
+        image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
       }
     </style>
     <div id="container"></div>
+    <content select="g-animation"></content>
   </template>
   <script>
     Polymer('g-sprite', {
+      _currentAnimation: null,
+      _rows: 0,
+      _columns: 0,
+      _width: 0,
+      _height: 0,
       ready: function () {
       },
-      update: function () {
-
+      update: function (dt) {
+        if (this._currentAnimation) {
+          this._currentAnimation.update(dt);
+          var state = this._currentAnimation.getCurrentState();
+          var x = state.getAttribute('x');
+          var y = state.getAttribute('y');
+          this.setTileIndices(x, y);
+        }
       },
       xindexChanged: function () {
-
       },
       yindexChanged: function () {
-
+      },
+      animationChanged: function (oldValue, newValue) {
+        this._currentAnimation = this.querySelector('g-animation[name="' + newValue + '"]');
+      },
+      setTileIndices: function (xIndex, yIndex) {
+        var imageContainer = this.$.container;
+        var bx = this._width / this._columns * xIndex;
+        var by = this._height / this._rows * yIndex;
+        imageContainer.style.backgroundPosition =  -bx + 'px ' + by + 'px';
       },
       srcChanged: function (oldValue, newValue) {
         var that = this;
@@ -38,8 +63,16 @@
           var columns = that.getAttribute('columns');
           var rows = that.getAttribute('rows');
 
-          imageContainer.style.width = tmpImg.width / columns + 'px';
-          imageContainer.style.height = tmpImg.height / rows + 'px';
+          that._rows = rows;
+          that._columns = columns;
+          that._width = tmpImg.width;
+          that._height = tmpImg.height;
+
+          var cellWidth = tmpImg.width / columns;
+          var cellHeight = tmpImg.height / rows;
+
+          imageContainer.style.width = cellWidth + 'px';
+          imageContainer.style.height = cellHeight + 'px';
 
           var xindex = 1;
           var yindex = 0;
@@ -49,11 +82,14 @@
 
           imageContainer.style.backgroundPosition =  -bx + 'px ' + by + 'px';
 
-          // var t = 'scale(' + (tmpImg.width / that.clientWidth) + ', ' + (tmpImg.height / that.clientHeight) + ')';
-          // imageContainer.style.transform = t;
-          // imageContainer.style.webkitTransform = t;
-          // imageContainer.style.mozTransform = t;
-          // console.log(t);
+          var aspectRatio = tmpImg.width / tmpImg.height;
+
+          var scale = that.clientWidth / cellWidth;
+
+          var t = 'scale(' + scale + ')';
+          imageContainer.style.transform = t;
+          imageContainer.style.webkitTransform = t;
+          imageContainer.style.mozTransform = t;
         };
 
         tmpImg.src = newValue;

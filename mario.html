@@ -1,24 +1,34 @@
-<polymer-element name="g-mario" attributes="" extends="g-entity">
+<polymer-element name="g-mario" attributes="width height" extends="g-entity">
   <template>
     <style>
       :host {
         display: block;
-        width: 200px;
-        height: 200px;
-      }
-
-      :host g-sprite {
-        width: 100%;
-        height: 100%;
       }
     </style>
-    <g-sprite src="assets/smw_mario_sheet.png" columns="10" rows="20"></g-sprite>
+    <g-sprite id="sprite" src="assets/smb3-mario_sheet.png" animation="run-little" columns="15" rows="14">
+      <g-animation name="run-little" period="250">
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="1" y="0"/>
+      </g-animation>
+    </g-sprite>
     <content></content>
   </template>
   <script>
     Polymer('g-mario', {
       ready: function () {
         this.super();
+      },
+      onUpdate: function (dt) {
+        this.$.sprite.update(dt);
+        this.super([dt]);
+      },
+      widthChanged: function (oldValue, newValue) {
+        this.style.width = newValue + 'px';
+        this.$.sprite.setAttribute('width', newValue);
+      },
+      heightChanged: function (oldValue, newValue) {
+        this.style.height = newValue + 'px';
+        this.$.sprite.setAttribute('height', newValue);
       }
     });
   </script>

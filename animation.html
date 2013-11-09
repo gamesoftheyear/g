@@ -1,0 +1,41 @@
+<polymer-element name="g-animation" attributes="name loop start period">
+  <template>
+    <content></content>
+  </template>
+  <script>
+    (function () {
+      var loopFunctions = {
+        linear: function (i, l) {
+          return (i + 1) % l;
+        }
+      };
+
+      Polymer('g-animation', {
+        _time: 0,
+        _period: 0,
+        ready: function () {
+          this.index = this.getAttribute('start') || 0;
+          this.states = this.querySelectorAll('g-animation-state');
+        },
+        _loopFunction: loopFunctions.linear,
+        update: function (dt) {
+          this._time += dt;
+          if (this._loopFunction && this._time > this._period / this.states.length) {
+            this._time = this._time % (this._period / this.states.length);
+            this.index = this._loopFunction(this.index, this.states.length);
+          }
+        },
+        loopChanged: function (oldValue, newValue) {
+          this._loopFunction = loopFunctions[newValue] || loopFunctions.linear;
+        },
+        index: 0,
+        getCurrentState: function () {
+          return this.states[this.index];
+        },
+        periodChanged: function (oldValue, newValue) {
+          this._period = newValue;
+        }
+      });
+    })();
+  </script>
+</polymer-element>
