@@ -40,6 +40,10 @@
         var dt = now - this.time;
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
+        var worldIds = Object.keys(this.worlds);
+        worldIds.forEach(function(worldId) {
+          this.worlds[worldId].onUpdate(dt);
+        }.bind(this));
         requestAnimationFrame(this.onUpdate);
       }
     });
