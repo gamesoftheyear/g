@@ -6,9 +6,31 @@
       }
     </style>
     <g-sprite id="sprite" src="assets/smb3-mario_sheet.png" animation="run-little" columns="15" rows="14">
-      <g-animation name="run-little" period="250">
+      <g-animation name="run-little" period="250" type="linear" loops="5">
         <g-animation-state x="0" y="0"/>
         <g-animation-state x="1" y="0"/>
+      </g-animation>
+      <g-animation name="grow" period="1000" type="linear">
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="0"/>
+        <g-animation-state x="0" y="2"/>
+        <g-animation-state x="0" y="2"/>
       </g-animation>
     </g-sprite>
     <content></content>
@@ -17,6 +39,13 @@
     Polymer('g-mario', {
       ready: function () {
         this.super();
+
+        var that = this;
+        this.$.sprite.addEventListener('AnimationEnded', function (e) {
+          var i = that.$.sprite._animationKeys.indexOf(that.$.sprite.getAttribute('animation'));
+          i = (i + 1) % that.$.sprite._animationKeys.length;
+          that.$.sprite.setAttribute('animation', that.$.sprite._animationKeys[i]);
+        }, false);
       },
       onUpdate: function (dt) {
         this.$.sprite.update(dt);

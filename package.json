@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git://github.com/gamesoftheyear/g.git"
   },
+  "dependencies": {
+    "jshint": "2.3.0",
+  },
   "author": "",
   "license": "BSD",
   "bugs": {

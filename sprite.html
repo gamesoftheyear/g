@@ -1,4 +1,4 @@
-<polymer-element name="g-sprite" attributes="columns rows src xindex yindex animation">
+<polymer-element name="g-sprite" attributes="columns rows src xindex yindex animation flipx flipy">
   <template>
     <style>
       :host {
@@ -25,7 +25,11 @@
       _columns: 0,
       _width: 0,
       _height: 0,
+      _animationKeys: [],
       ready: function () {
+        this._animationKeys = Array.prototype.map.call(this.querySelectorAll('g-animation'), function (a) {
+          return a.getAttribute('name');
+        });
       },
       update: function (dt) {
         if (this._currentAnimation) {
@@ -36,18 +40,31 @@
           this.setTileIndices(x, y);
         }
       },
+      flipxChanged: function (oldValue, newValue) {
+        var t = 'rotateY(' + (!!newValue ? 180 : 0) + 'deg)';
+        this.style.transform = t;
+        this.style.webkitTransform = t;
+        this.style.mozTransform = t;
+      },
+      flipyChanged: function (oldValue, newValue) {
+        var t = 'rotateX(' + (!!newValue ? 180 : 0) + 'deg)';
+        this.style.transform = t;
+        this.style.webkitTransform = t;
+        this.style.mozTransform = t;
+      },
       xindexChanged: function () {
       },
       yindexChanged: function () {
       },
       animationChanged: function (oldValue, newValue) {
+        console.log(oldValue, newValue);
         this._currentAnimation = this.querySelector('g-animation[name="' + newValue + '"]');
       },
       setTileIndices: function (xIndex, yIndex) {
         var imageContainer = this.$.container;
-        var bx = this._width / this._columns * xIndex;
-        var by = this._height / this._rows * yIndex;
-        imageContainer.style.backgroundPosition =  -bx + 'px ' + by + 'px';
+        var bx = -this._width / this._columns * xIndex;
+        var by = -this._height / this._rows * yIndex;
+        imageContainer.style.backgroundPosition =  bx + 'px ' + by + 'px';
       },
       srcChanged: function (oldValue, newValue) {
         var that = this;
@@ -74,14 +91,6 @@
           imageContainer.style.width = cellWidth + 'px';
           imageContainer.style.height = cellHeight + 'px';
 
-          var xindex = 1;
-          var yindex = 0;
-
-          var bx = tmpImg.width / columns * xindex;
-          var by = tmpImg.height / rows * yindex;
-
-          imageContainer.style.backgroundPosition =  -bx + 'px ' + by + 'px';
-
           var aspectRatio = tmpImg.width / tmpImg.height;
 
           var scale = that.clientWidth / cellWidth;
@@ -90,6 +99,8 @@
           imageContainer.style.transform = t;
           imageContainer.style.webkitTransform = t;
           imageContainer.style.mozTransform = t;
+
+          that.setTileIndices(0, 0);
         };
 
         tmpImg.src = newValue;
