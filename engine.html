@@ -20,16 +20,22 @@
         this.dispatchBatch = [];
 
         this.addEventListener('AddWorld', this.onAddWorld, false);
-        window.addEventListener("keypress", this.registerEvent.bind(this));
+
+        var eventQueue = this.eventQueue = {};
+
+        function generateEventHandler (name) {
+          return function (e) {
+            eventQueue[name] = eventQueue[name] || [];
+            eventQueue[name].push(e);
+          };
+        }
+
+        window.addEventListener('keydown', generateEventHandler('keydown'));
+        window.addEventListener('keyup', generateEventHandler('keyup'));
 
         requestAnimationFrame(this.onUpdate);
       },
       registerEvent: function(event) {
-        //TODO: recognize when button is held down
-        if (event.charCode == 32) {
-          var notification = new CustomEvent('dispatch', { 'detail': 'space' });
-          this.dispatchBatch.push(notification);
-        }
       },
       dispatchEvents: function() {
         while (this.dispatchBatch.length != 0) {
@@ -58,6 +64,22 @@
         var dt = now - this.time;
         this.time = now;
         // console.info('frame, dt:', this.frame, dt);
+
+        var inputEvents = [];
+        var inputElements = this.querySelectorAll('g-input');
+        var eventQueue = this.eventQueue;
+
+        Object.keys(eventQueue).forEach(function (eventName) {
+          Array.prototype.forEach.call(inputElements, function (gInput) {
+            inputEvents = inputEvents.concat(gInput.processEventQueue(eventName, eventQueue[eventName]));
+          });
+          eventQueue[eventName] = [];
+        });
+
+        if (inputEvents.length > 0) {
+          console.log(inputEvents);
+        }
+
         var worldIds = Object.keys(this.worlds);
         worldIds.forEach(function(worldId) {
           this.worlds[worldId].onUpdate(dt);
