@@ -6,6 +6,12 @@
       }
     </style>
     <g-sprite id="sprite" src="assets/smb3-mario_sheet.png" animation="run-little" columns="15" rows="14">
+      <g-animation name="idle">
+        <g-animation-state x="0" y="0"/>
+      </g-animation>
+      <g-animation name="jump">
+        <g-animation-state x="3" y="0"/>
+      </g-animation>
       <g-animation name="run-little" period="250" type="linear" loops="5">
         <g-animation-state x="0" y="0"/>
         <g-animation-state x="1" y="0"/>
@@ -52,11 +58,18 @@
       },
       onMoveLeft: function (event) {
         this.$.sprite.setAttribute('flipx', false);
+        this.$.sprite.setAttribute('animation', 'run-little');
       },
       onMoveRight: function (event) {
         this.$.sprite.setAttribute('flipx', true);
+        this.$.sprite.setAttribute('animation', 'run-little');
       },
       onJump: function (event) {
+        this.$.sprite.setAttribute('animation', 'jump');
+        var that = this;
+        setTimeout(function () {
+          that.$.sprite.setAttribute('animation', 'idle');
+        }, 1000);
       },
       onRun: function (event) {
       },
