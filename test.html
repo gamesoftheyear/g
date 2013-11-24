@@ -15,17 +15,17 @@
     <g-engine>
       <g-input>
         <g-key value="shift" state="PlayerRun"></g-key>
-        <g-key value="left" state="PlayerLeft"></g-key>
-        <g-key value="right" state="PlayerRight"></g-key>
+        <g-key value="left" state="PlayerMoveLeft"></g-key>
+        <g-key value="right" state="PlayerMoveRight"></g-key>
         <g-key value="space" action="PlayerJump"></g-key>
         <g-key value="ctrl" action="PlayerShoot"></g-key>
       </g-input>
       <g-world>
         <g-mario width="50" height="50">
-          <g-action-map name="Jump" event="PlayerJump"></g-action-map>
-          <g-action-map name="MoveRight" event="PlayerRight"></g-action-map>
-          <g-action-map name="MoveLeft" event="PlayerLeft"></g-action-map>
-          <g-action-map name="Run" event="PlayerRun"></g-action-map>
+          <g-bind name="Jump" event="PlayerJump"></g-action-map>
+          <g-bind name="MoveRight" event="PlayerMoveRight"></g-action-map>
+          <g-bind name="MoveLeft" event="PlayerMoveLeft"></g-action-map>
+          <g-bind name="Run" event="PlayerRun"></g-action-map>
         </g-mario>
       </g-world>
     </g-engine>

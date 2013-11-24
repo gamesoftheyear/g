@@ -76,11 +76,16 @@
           eventQueue[eventName] = [];
         });
 
-        if (inputEvents.length > 0) {
-          console.log(inputEvents);
-        }
+        // if (inputEvents.length > 0) {
+        //   console.log(inputEvents);
+        // }
 
         var worldIds = Object.keys(this.worlds);
+
+        worldIds.forEach(function(worldId) {
+          this.worlds[worldId].onInput(inputEvents);
+        }.bind(this));
+
         worldIds.forEach(function(worldId) {
           this.worlds[worldId].onUpdate(dt);
         }.bind(this));

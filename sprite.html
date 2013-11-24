@@ -41,13 +41,13 @@
         }
       },
       flipxChanged: function (oldValue, newValue) {
-        var t = 'rotateY(' + (!!newValue ? 180 : 0) + 'deg)';
+        var t = 'rotateY(' + (newValue === "true" ? 180 : 0) + 'deg)';
         this.style.transform = t;
         this.style.webkitTransform = t;
         this.style.mozTransform = t;
       },
       flipyChanged: function (oldValue, newValue) {
-        var t = 'rotateX(' + (!!newValue ? 180 : 0) + 'deg)';
+        var t = 'rotateX(' + (newValue === "true" ? 180 : 0) + 'deg)';
         this.style.transform = t;
         this.style.webkitTransform = t;
         this.style.mozTransform = t;

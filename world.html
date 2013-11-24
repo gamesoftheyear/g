@@ -28,6 +28,21 @@
           parent.dispatchEvent(addWorldEvent);
         });
       },
+      onInput: function(events) {
+        var entityIds = Object.keys(this.entities);
+        entityIds.forEach(function(entityId) {
+          var entity = this.entities[entityId];
+          events.forEach(function(event) {
+            var mappings = entity.querySelectorAll('g-bind[event="' + event.type + '"]');
+            Array.prototype.forEach.call(mappings, function (mapping) {
+              var handlerName = 'on' + mapping.getAttribute('name');
+              if(entity[handlerName]) {
+                entity[handlerName](event);
+              }
+            });
+          }.bind(this));
+        }.bind(this));
+      },
       onUpdate: function (dt) {
         var entityIds = Object.keys(this.entities);
         entityIds.forEach(function(entityId) {
