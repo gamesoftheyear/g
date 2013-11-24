@@ -33,6 +33,9 @@
         <g-animation-state x="0" y="2"/>
       </g-animation>
     </g-sprite>
+    <g-state-machine>
+      <g-state name="running"></g-state>
+    </g-state-machine>
     <content></content>
   </template>
   <script>
@@ -46,6 +49,14 @@
           i = (i + 1) % that.$.sprite._animationKeys.length;
           that.$.sprite.setAttribute('animation', that.$.sprite._animationKeys[i]);
         }, false);
+      },
+      onMoveLeft: function (event) {
+      },
+      onMoveRight: function (event) {
+      },
+      onJump: function (event) {
+      },
+      onRun: function (event) {
       },
       onUpdate: function (dt) {
         this.$.sprite.update(dt);

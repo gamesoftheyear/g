@@ -13,10 +13,18 @@
   </head>
   <body>
     <g-engine>
-      <g-input id="inputRegistry" />
+      <g-input>
+        <g-key value="shift" state="PlayerRun" />
+        <g-key value="left" state="PlayerLeft" />
+        <g-key value="right" state="PlayerRight" />
+        <g-key value="space" action="PlayerJump" />
+      </g-input>
       <g-world>
         <g-mario width="50" height="50">
-          <g-key name="space"></g-key>
+          <g-action-map name="Jump" event="PlayerJump" />
+          <g-action-map name="MoveRight" event="PlayerRight"/>
+          <g-action-map name="MoveLeft" event="PlayerLeft"/>
+          <g-action-map name="Run" event="PlayerRun"/>
         </g-mario>
       </g-world>
     </g-engine>
